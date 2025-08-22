@@ -22,7 +22,7 @@ This plugin was completely generated and written by ChatGPT 5 using the ["vibe c
   - Works only on calls like `t('...')` or `I18n.t('...')`.
   - Asks which locale to use.
   - Opens the corresponding `<locale>.yml`.
-  - Navigates to the **value** of the selected key.
+  - Navigates to the value of the selected key.
 
 - **Shortcuts & Menus**
   - Default key bindings:

@@ -3,8 +3,8 @@
   {
     "caption": "I18n",
     "children": [
-      { "caption": "Edit", "command": "i18n_rails_edit_key" },
-      { "caption": "Jump", "command": "i18n_rails_jump_to_key" }
+      { "caption": "Edit key", "command": "i18n_rails_edit_key" },
+      { "caption": "Jump to key", "command": "i18n_rails_jump_to_key" }
     ]
   }
 ]

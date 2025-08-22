@@ -170,8 +170,6 @@ def run_ruby(ruby_path, script, args):
                 pass
 
 
-# ---------- Extract key ONLY from t('...') / I18n.t('...') ----------
-
 def extract_key_from_t_call(view):
     """
     Return the i18n key (string) if the current selection/caret is inside
@@ -225,6 +223,21 @@ def extract_key_from_t_call(view):
                 return m.group(2)
 
     return None
+
+
+def is_rails_file(view):
+    """Return True if the file looks like a Rails Ruby/view file (not JS/TXT)."""
+    fname = view.file_name() or ""
+    if not fname:
+        return False
+    lowered = fname.lower()
+    allowed_exts = (".rb", ".erb", ".haml", ".slim", ".rhtml", ".builder", ".jbuilder", ".rake")
+    return any(lowered.endswith(ext) for ext in allowed_exts)
+
+
+def is_applicable_context(view):
+    """Visible/Enabled only in Rails-like files AND when caret/selection is inside t('...')."""
+    return is_rails_file(view) and (extract_key_from_t_call(view) is not None)
 
 
 # ---------- Ruby helpers (embedded) ----------
@@ -381,11 +394,10 @@ RUBY_WRITE_VALUES = r'''
 
 class I18nRailsEditKeyCommand(sublime_plugin.TextCommand):
     def is_enabled(self):
-        # Enable only when selection/caret is inside t('...') / I18n.t('...')
-        return extract_key_from_t_call(self.view) is not None
+        return is_applicable_context(self.view)
 
-    # opzionale: tienilo visibile sempre (grigio quando disabilitato)
     def is_visible(self):
+        # return is_applicable_context(self.view)
         return True
 
     """
@@ -393,15 +405,12 @@ class I18nRailsEditKeyCommand(sublime_plugin.TextCommand):
     Only runs if selection/caret is within such a call.
     """
     def run(self, edit):
-        view = self.view
-
-        key_from_call = extract_key_from_t_call(view)
-        if not key_from_call:
+        if not is_applicable_context(self.view):
             return
 
         selected = key_from_call.strip()
         self.settings = sublime.load_settings(SETTINGS_FILE) or sublime.Settings()
-        self.project_root = find_project_root(view.file_name())
+        self.project_root = find_project_root(self.view.file_name())
         if not self.project_root:
             sublime.error_message("Could not find Rails project root (config/locales).")
             return
@@ -413,7 +422,7 @@ class I18nRailsEditKeyCommand(sublime_plugin.TextCommand):
 
         # resolve key if relative
         if selected.startswith("."):
-            abs_key = resolve_relative_key(view, selected)
+            abs_key = resolve_relative_key(self.view, selected)
             if not abs_key:
                 sublime.error_message("Could not resolve relative key '{}' from this file path.".format(selected))
                 return
@@ -491,11 +500,10 @@ class I18nRailsEditKeyCommand(sublime_plugin.TextCommand):
 
 class I18nRailsJumpToKeyCommand(sublime_plugin.TextCommand):
     def is_enabled(self):
-        # Enable only when selection/caret is inside t('...') / I18n.t('...')
-        return extract_key_from_t_call(self.view) is not None
+        return is_applicable_context(self.view)
 
-    # opzionale: tienilo visibile sempre (grigio quando disabilitato)
     def is_visible(self):
+        # return is_applicable_context(self.view)
         return True
 
     """
@@ -504,15 +512,12 @@ class I18nRailsJumpToKeyCommand(sublime_plugin.TextCommand):
     YAML-aware traversal.
     """
     def run(self, edit):
-        view = self.view
-
-        key_from_call = extract_key_from_t_call(view)
-        if not key_from_call:
+        if not is_applicable_context(self.view):
             return
 
         selected = key_from_call.strip()
         self.settings = sublime.load_settings(SETTINGS_FILE) or sublime.Settings()
-        self.project_root = find_project_root(view.file_name())
+        self.project_root = find_project_root(self.view.file_name())
         if not self.project_root:
             sublime.error_message("Could not find Rails project root (config/locales).")
             return
@@ -523,7 +528,7 @@ class I18nRailsJumpToKeyCommand(sublime_plugin.TextCommand):
             return
 
         if selected.startswith("."):
-            abs_key = resolve_relative_key(view, selected)
+            abs_key = resolve_relative_key(self.view, selected)
             if not abs_key:
                 sublime.error_message("Could not resolve relative key '{}'".format(selected))
                 return
