@@ -405,7 +405,11 @@ class I18nRailsEditKeyCommand(sublime_plugin.TextCommand):
     Only runs if selection/caret is within such a call.
     """
     def run(self, edit):
-        if not is_applicable_context(self.view):
+        if not is_rails_file(self.view):
+          return
+
+        key_from_call = extract_key_from_t_call(self.view)
+        if not key_from_call:
             return
 
         selected = key_from_call.strip()
@@ -512,7 +516,11 @@ class I18nRailsJumpToKeyCommand(sublime_plugin.TextCommand):
     YAML-aware traversal.
     """
     def run(self, edit):
-        if not is_applicable_context(self.view):
+        if not is_rails_file(self.view):
+          return
+
+        key_from_call = extract_key_from_t_call(self.view)
+        if not key_from_call:
             return
 
         selected = key_from_call.strip()
