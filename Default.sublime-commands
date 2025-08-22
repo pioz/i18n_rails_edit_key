@@ -1,0 +1,10 @@
+[
+  {
+    "caption": "I18n Rails: Edit Key Values",
+    "command": "i18n_rails_edit_key"
+  },
+  {
+    "caption": "I18n Rails: Jump To Key",
+    "command": "i18n_rails_jump_to_key"
+  }
+]

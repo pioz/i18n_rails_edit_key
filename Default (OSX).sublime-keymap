@@ -1,0 +1,4 @@
+[
+  { "keys": ["super+alt+e"], "command": "i18n_rails_edit_key" },
+  { "keys": ["super+alt+j"], "command": "i18n_rails_jump_to_key" }
+]

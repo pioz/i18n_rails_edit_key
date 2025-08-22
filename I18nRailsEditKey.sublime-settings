@@ -1,0 +1,10 @@
+{
+  // Relative to Rails project root.
+  "locales_dir": "config/locales",
+
+  // Optional: ask this locale first, if present (e.g., "it" or "en").
+  "default_locale_first": "en",
+
+  // Path to Ruby interpreter (if not on PATH).
+  "ruby_path": "ruby"
+}
