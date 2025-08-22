@@ -38,7 +38,7 @@ This plugin was completely generated and written by ChatGPT 5 using the ["vibe c
 1. Open Sublime Text and go to **Preferences → Browse Packages…**
 2. Clone this repository directly into `Packages` directory
 ```
-git clone https://github.com/pioz/i18n_rails_edit_key.git I18nRailsHelper
+git clone https://github.com/pioz/i18n_rails_edit_key.git I18nRailsEditKey
 
 ````
 
