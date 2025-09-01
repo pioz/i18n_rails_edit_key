@@ -231,7 +231,7 @@ def is_rails_file(view):
     if not fname:
         return False
     lowered = fname.lower()
-    allowed_exts = (".rb", ".erb", ".haml", ".slim", ".rhtml", ".builder", ".jbuilder", ".rake")
+    allowed_exts = (".rb", ".erb", ".haml", ".slim", ".rhtml", ".builder", ".jbuilder", ".rake", ".js", ".jsx")
     return any(lowered.endswith(ext) for ext in allowed_exts)
 
 
